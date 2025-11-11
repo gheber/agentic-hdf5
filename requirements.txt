@@ -1,0 +1,7 @@
+h5py
+numpy
+pytest
+sentence-transformers
+tqdm
+xarray
+matplotlib
