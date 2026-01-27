@@ -5,7 +5,7 @@ import h5py
 import tempfile
 import os
 
-# Add the servers/h5py directory to path so imports work
+# Add the tools/h5py directory to path so imports work
 sys.path.insert(0, str(Path(__file__).parent.parent / 'tools' / 'h5py'))
 
 
