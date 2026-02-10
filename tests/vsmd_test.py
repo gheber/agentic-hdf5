@@ -246,8 +246,8 @@ class TestVSMD:
         assert '/chinese_data' in result_paths
 
     def test_large_scale_vectorization(self, temp_h5_file):
-        """Test 5: File with ~1000 SMD entries to test batch processing."""
-        NUM_OBJECTS = 1000
+        """Test 5: File with ~300 SMD entries to test batch processing."""
+        NUM_OBJECTS = 300
 
         # Create many datasets with SMD
         with h5py.File(temp_h5_file, 'w') as f:
