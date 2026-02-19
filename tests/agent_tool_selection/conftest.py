@@ -73,7 +73,25 @@ def _build_system_prompt(catalog):
     return SYSTEM_PROMPT.format(tool_descriptions=descriptions)
 
 
-def run_agent_turn(user_prompt, catalog, timeout=60):
+DEFAULT_MODEL = "haiku"
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--model",
+        action="store",
+        default=DEFAULT_MODEL,
+        help=f"Claude model to use for agent tests (default: {DEFAULT_MODEL})",
+    )
+
+
+@pytest.fixture(scope="session")
+def model(request):
+    """The Claude model to use, from --model flag."""
+    return request.config.getoption("--model")
+
+
+def run_agent_turn(user_prompt, catalog, model=DEFAULT_MODEL, timeout=60):
     """
     Send a prompt to the claude CLI in print mode and return the response text.
 
@@ -98,6 +116,7 @@ def run_agent_turn(user_prompt, catalog, timeout=60):
         "claude",
         "-p",
         "--no-session-persistence",
+        "--model", model,
         "--tools", "",
         "--system-prompt", system_prompt,
         user_prompt,
