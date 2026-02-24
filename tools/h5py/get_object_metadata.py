@@ -3,6 +3,23 @@ from h5py_helpers import (_get_attribute_metadata, _get_dataset_metadata,
                           _get_group_metadata, _get_committed_datatype_metadata,
                           _get_link_metadata)
 
+try:
+    from tools.h5py.registry import hdf5_tool
+except ImportError:
+    def hdf5_tool(**_kw):
+        return lambda f: f
+
+
+@hdf5_tool(
+    category="inspection",
+    keywords=["metadata", "inspect", "info", "properties", "shape", "dtype", "chunks", "compression", "attributes"],
+    use_cases=[
+        "Understanding dataset structure before visualization",
+        "Checking current chunk configuration before rechunking",
+        "Inspecting compression settings",
+        "Exploring file structure",
+    ],
+)
 def get_object_metadata(filepath: str, object_path: str) -> dict:
     """
     Retrieve comprehensive metadata for a specific HDF5 object.

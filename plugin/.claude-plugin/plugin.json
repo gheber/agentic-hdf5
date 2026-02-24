@@ -1,0 +1,6 @@
+{
+  "name": "hdf5",
+  "description": "HDF5 tools and expert knowledge for agentic workflows — chunking, compression, visualization, semantic metadata, and more",
+  "version": "0.1.1",
+  "author": { "name": "Matthew Larson" }
+}

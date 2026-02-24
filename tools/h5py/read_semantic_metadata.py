@@ -1,6 +1,23 @@
 import h5py
 from h5py_helpers import _parse_object_path, _construct_smd_attribute_name
 
+try:
+    from tools.h5py.registry import hdf5_tool
+except ImportError:
+    def hdf5_tool(**_kw):
+        return lambda f: f
+
+
+@hdf5_tool(
+    category="semantic-metadata",
+    keywords=["semantic", "metadata", "smd", "read", "description", "documentation", "meaning", "context"],
+    use_cases=[
+        "Understanding what a dataset represents",
+        "Reading human-readable descriptions",
+        "Checking if SMD exists for an object",
+        "Getting context before visualization",
+    ],
+)
 def read_semantic_metadata(filepath: str, object_path: str) -> str:
     """
     Read the semantic metadata attribute associated with a given object.

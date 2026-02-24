@@ -9,13 +9,27 @@ import h5py
 import numpy as np
 from datetime import datetime
 import hashlib
-from sentence_transformers import SentenceTransformer
-from tqdm import tqdm
+
+try:
+    from tools.h5py.registry import hdf5_tool
+except ImportError:
+    def hdf5_tool(**_kw):
+        return lambda f: f
 
 
 BATCH_SIZE = 1000  # Process SMD in batches to bound memory usage
 
 
+@hdf5_tool(
+    category="semantic-search",
+    keywords=["vectorize", "embed", "embedding", "semantic search", "index", "vector", "transformer", "prepare search"],
+    use_cases=[
+        "Enabling semantic search over SMD",
+        "Building searchable indices",
+        "Preparing for natural language queries",
+        "Creating vector representations",
+    ],
+)
 def vectorize_semantic_metadata(
     filepath: str,
     embedder_model: str = "sentence-transformers/all-MiniLM-L6-v2",
@@ -72,6 +86,8 @@ def vectorize_semantic_metadata(
                 del f['/ahdf5-vsmd']
 
         # Step 3: Load embedding model
+        from sentence_transformers import SentenceTransformer
+        from tqdm import tqdm
         print(f"Loading embedding model: {embedder_model}")
         model = SentenceTransformer(embedder_model)
         embed_dim = model.get_sentence_embedding_dimension()

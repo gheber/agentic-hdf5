@@ -2,8 +2,24 @@ import h5py
 from h5py_helpers import _get_attribute_metadata, _get_dataset_metadata, _get_group_metadata, _get_committed_datatype_metadata, _has_smd
 from h5py_constants import SMD_GENERATION_BATCH_SIZE
 
+try:
+    from tools.h5py.registry import hdf5_tool
+except ImportError:
+    def hdf5_tool(**_kw):
+        return lambda f: f
+
 
 # TBD - Impose bottom-up ordering for context optimization (e.g. file summary is more knowledgeable)
+@hdf5_tool(
+    category="semantic-metadata",
+    keywords=["collect", "batch", "scan", "missing", "smd", "semantic metadata", "generate", "iterate"],
+    use_cases=[
+        "Finding all objects without SMD",
+        "Batch SMD generation workflows",
+        "Iteratively documenting large files",
+        "Identifying undocumented datasets",
+    ],
+)
 def collect_objects_for_smd(filepath: str, object_path: str = "/",
                             max_depth: int = -1) -> dict:
     """

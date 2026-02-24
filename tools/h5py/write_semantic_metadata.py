@@ -1,7 +1,23 @@
 import h5py
 from h5py_helpers import _parse_object_path, _construct_smd_attribute_name, _prefix_best_guess
 
+try:
+    from tools.h5py.registry import hdf5_tool
+except ImportError:
+    def hdf5_tool(**_kw):
+        return lambda f: f
 
+
+@hdf5_tool(
+    category="semantic-metadata",
+    keywords=["semantic", "metadata", "smd", "write", "document", "annotate", "describe", "label"],
+    use_cases=[
+        "Documenting what a dataset contains",
+        "Adding human-readable descriptions",
+        "Annotating imported data",
+        "Recording provenance information",
+    ],
+)
 def write_semantic_metadata(filepath: str, object_path: str,
                             smd_value: str, is_best_guess: bool = True) -> str:
     """
