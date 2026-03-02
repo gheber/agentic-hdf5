@@ -1,7 +1,23 @@
 import h5py
 from typing import Optional, Literal
 
+try:
+    from tools.h5py.registry import hdf5_tool
+except ImportError:
+    def hdf5_tool(**_kw):
+        return lambda f: f
 
+
+@hdf5_tool(
+    category="optimization",
+    keywords=["compress", "compression", "filter", "gzip", "szip", "shuffle", "fletcher32", "reduce size", "decompress"],
+    use_cases=[
+        "Compressing datasets to reduce file size",
+        "Adding data integrity checksums",
+        "Removing compression",
+        "Applying shuffle filter to improve compression",
+    ],
+)
 def apply_filter_dataset(
     filepath: str,
     object_path: str,

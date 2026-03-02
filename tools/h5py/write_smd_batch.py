@@ -1,8 +1,24 @@
 import h5py
 from h5py_helpers import _parse_object_path, _construct_smd_attribute_name, _prefix_best_guess
 
+try:
+    from tools.h5py.registry import hdf5_tool
+except ImportError:
+    def hdf5_tool(**_kw):
+        return lambda f: f
+
 
 # TBD - Impose bottom-up ordering for context optimization (e.g. file summary is more knowledgeable)
+@hdf5_tool(
+    category="semantic-metadata",
+    keywords=["batch", "write", "multiple", "bulk", "smd", "semantic metadata", "transaction"],
+    use_cases=[
+        "Writing SMD for multiple objects at once",
+        "Batch documentation workflows",
+        "Efficiently annotating large files",
+        "Pairing with collect_objects_for_smd()",
+    ],
+)
 def write_smd_batch(filepath: str, smd_map: dict, is_best_guess: bool = True) -> dict:
     """
     Write semantic metadata for multiple objects simultaneously in a single transaction.

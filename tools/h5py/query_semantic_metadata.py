@@ -7,12 +7,27 @@ vectorized semantic metadata (VSMD).
 
 import h5py
 import numpy as np
-from sentence_transformers import SentenceTransformer
+
+try:
+    from tools.h5py.registry import hdf5_tool
+except ImportError:
+    def hdf5_tool(**_kw):
+        return lambda f: f
 
 
 BLOCK_SIZE = 128000  # Load embeddings in blocks for large files
 
 
+@hdf5_tool(
+    category="semantic-search",
+    keywords=["search", "query", "find", "semantic", "natural language", "similarity", "discover", "locate"],
+    use_cases=[
+        "Finding datasets by natural language query",
+        "Discovering relevant data without knowing paths",
+        "Semantic search for 'temperature data'",
+        "Locating datasets by description",
+    ],
+)
 def query_semantic_metadata(
     filepath: str,
     query_text: str,
@@ -82,6 +97,7 @@ def query_semantic_metadata(
 
     try:
         # Step 3: Load embedding model and embed query
+        from sentence_transformers import SentenceTransformer
         model = SentenceTransformer(model_to_use)
         query_embedding = model.encode(
             [query_text],

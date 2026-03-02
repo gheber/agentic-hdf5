@@ -1,0 +1,6 @@
+{
+  "hdf5-tools": {
+    "command": "uvx",
+    "args": ["--from", "git+https://github.com/mattjala/agentic-hdf5", "hdf5-mcp-server"]
+  }
+}

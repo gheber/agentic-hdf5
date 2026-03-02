@@ -3,7 +3,23 @@ import subprocess
 import os
 from typing import Optional, Literal
 
+try:
+    from tools.h5py.registry import hdf5_tool
+except ImportError:
+    def hdf5_tool(**_kw):
+        return lambda f: f
 
+
+@hdf5_tool(
+    category="optimization",
+    keywords=["chunk", "rechunk", "layout", "optimize", "h5repack", "contiguous", "performance", "access pattern"],
+    use_cases=[
+        "Optimizing chunk size for access patterns",
+        "Converting between chunked and contiguous layouts",
+        "Improving read/write performance",
+        "Aligning chunks with data access patterns",
+    ],
+)
 def rechunk_dataset(
     filepath: str,
     object_path: str,

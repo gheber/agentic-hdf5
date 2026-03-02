@@ -1,10 +1,27 @@
 import h5py
+import matplotlib
+matplotlib.use('Agg')  # Non-interactive backend
 import xarray as xr
 import matplotlib.pyplot as plt
-matplotlib.use('Agg')  # Non-interactive backend
 from typing import Optional, Literal, Dict, Any
 
+try:
+    from tools.h5py.registry import hdf5_tool
+except ImportError:
+    def hdf5_tool(**_kw):
+        return lambda f: f
 
+
+@hdf5_tool(
+    category="analysis",
+    keywords=["visualize", "plot", "graph", "chart", "image", "heatmap", "line plot", "histogram", "contour", "display"],
+    use_cases=[
+        "Creating plots of temperature data",
+        "Visualizing 2D sensor arrays",
+        "Generating histograms of distributions",
+        "Plotting time series data",
+    ],
+)
 def visualize(
     filepath: str,
     object_path: str,
