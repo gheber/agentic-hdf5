@@ -1,0 +1,23 @@
+[project]
+name = "agentic-hdf5"
+version = "0.1.0"
+description = "HDF5 tools and semantic metadata for agentic workflows"
+requires-python = ">=3.10"
+dependencies = [
+    "h5py",
+    "numpy",
+    "matplotlib",
+    "xarray",
+    "tqdm",
+    "mcp",
+]
+
+[project.optional-dependencies]
+search = ["sentence-transformers>=2.2.0"]
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+include = ["tools*"]
+
+[project.scripts]
+hdf5-mcp-server = "tools.mcp_server:main"
