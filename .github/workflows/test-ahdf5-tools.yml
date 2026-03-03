@@ -76,6 +76,30 @@ jobs:
           echo "=== Available HDF5 tools ==="
           ls -lh /usr/local/bin/h5* || echo "No h5 tools found"
 
+      - name: Validate plugin structure
+        run: |
+          # Verify marketplace.json exists and is valid JSON
+          python -c "import json; json.load(open('.claude-plugin/marketplace.json'))"
+          # Verify plugin.json exists and is valid JSON
+          python -c "import json; json.load(open('plugin/.claude-plugin/plugin.json'))"
+          # Verify .mcp.json exists and is valid JSON
+          python -c "import json; json.load(open('plugin/.mcp.json'))"
+          # Verify all skills have SKILL.md
+          python -c "
+          from pathlib import Path
+          skills = list(Path('plugin/skills').iterdir())
+          assert len(skills) >= 10, f'Expected 10+ skills, found {len(skills)}'
+          for s in skills:
+              if s.is_dir():
+                  assert (s / 'SKILL.md').exists(), f'Missing SKILL.md in {s.name}'
+          print(f'Validated {len(skills)} skills')
+          "
+
+      - name: Verify MCP server starts
+        run: |
+          pip install -e .
+          timeout 5 hdf5-mcp-server || [ $? -eq 124 ]
+
       - name: Run h5py MCP tests
         run: |
           # Skip filter tests due to inconsistent h5repack filter availability in GitHub Actions.
