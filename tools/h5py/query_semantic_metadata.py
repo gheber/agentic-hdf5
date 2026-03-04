@@ -97,14 +97,9 @@ def query_semantic_metadata(
 
     try:
         # Step 3: Load embedding model and embed query
-        from sentence_transformers import SentenceTransformer
-        model = SentenceTransformer(model_to_use)
-        query_embedding = model.encode(
-            [query_text],
-            convert_to_numpy=True,
-            show_progress_bar=False,
-            normalize_embeddings=True  # L2-normalize for cosine similarity
-        )[0]  # Extract single vector
+        from fastembed import TextEmbedding
+        model = TextEmbedding(model_to_use)
+        query_embedding = list(model.embed([query_text]))[0]  # Already L2-normalized
 
         # Step 4: Filter candidates and compute similarity
         with h5py.File(filepath, 'r') as f:

@@ -196,7 +196,7 @@ def vectorize_semantic_metadata(
     rebuild: bool = False,
     object_paths: Optional[str] = None,
 ) -> dict:
-    """Convert text-based semantic metadata into vector embeddings for semantic search. Requires sentence-transformers."""
+    """Convert text-based semantic metadata into vector embeddings for semantic search."""
     # Type coercion: object_paths arrives as JSON array string
     parsed_paths = None
     if object_paths is not None:
@@ -213,7 +213,7 @@ def query_semantic_metadata(
     min_score: float = 0.0,
     embedder_model: Optional[str] = None,
 ) -> dict:
-    """Perform natural language semantic search over vectorized HDF5 metadata. Requires sentence-transformers."""
+    """Perform natural language semantic search over vectorized HDF5 metadata."""
     return _query_semantic_metadata(
         filepath, query_text, top_k, object_filter, min_score, embedder_model
     )

@@ -10,7 +10,7 @@ dependencies = [
     "xarray",
     "tqdm",
     "mcp",
-    "sentence-transformers>=2.2.0",
+    "fastembed",
 ]
 
 [project.optional-dependencies]

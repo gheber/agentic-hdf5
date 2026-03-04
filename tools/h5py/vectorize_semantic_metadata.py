@@ -86,11 +86,14 @@ def vectorize_semantic_metadata(
                 del f['/ahdf5-vsmd']
 
         # Step 3: Load embedding model
-        from sentence_transformers import SentenceTransformer
+        from fastembed import TextEmbedding
         from tqdm import tqdm
         print(f"Loading embedding model: {embedder_model}")
-        model = SentenceTransformer(embedder_model)
-        embed_dim = model.get_sentence_embedding_dimension()
+        model = TextEmbedding(embedder_model)
+
+        # Determine embedding dimension from a test encode
+        test_embed = list(model.embed(["test"]))[0]
+        embed_dim = len(test_embed)
 
         # Step 4: Process in batches and write to HDF5
         total_objects = len(smd_objects)
@@ -109,13 +112,8 @@ def vectorize_semantic_metadata(
             batch_texts = [obj['smd_text'] for obj in batch]
             batch_paths = [obj['object_path'] for obj in batch]
 
-            # Generate embeddings
-            batch_embeddings = model.encode(
-                batch_texts,
-                convert_to_numpy=True,
-                show_progress_bar=False,
-                normalize_embeddings=True  # L2-normalize for cosine similarity via dot product
-            )
+            # Generate embeddings (fastembed returns L2-normalized by default)
+            batch_embeddings = np.array(list(model.embed(batch_texts)))
 
             # Accumulate results
             all_texts.extend(batch_texts)
