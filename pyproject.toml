@@ -10,10 +10,10 @@ dependencies = [
     "xarray",
     "tqdm",
     "mcp",
+    "sentence-transformers>=2.2.0",
 ]
 
 [project.optional-dependencies]
-search = ["sentence-transformers>=2.2.0"]
 dev = ["pytest"]
 
 [tool.setuptools.packages.find]

@@ -14,7 +14,7 @@ Semantic metadata is introduced in order to achieve a few different goals.
 
 Each high-level HDF5 object (dataset, group, committed datatype) may have an associated HDF attribute that acts as the semantic metadata. The semantic metadata attribute's name will be `ahdf5-smd-<original object name>`.
 
-Regular HDF5 attributes do not have their own semantic metadata. Instead, when generating or using semantic metadata for an object, the attributes attached to that object are considered as part of the object's overall context.
+Regular HDF5 attributes do not have their own semantic metadata. Instead, when generating or using semantic metadata for an object, the attributes attached to that object are considered as part of the object's overall context, and are described in the object's semantic metadata attribute.
 
 For datasets, committed datatypes, and non-root groups the semantic metadata attribute will reside in the same group as original object. The root group's semantic metadata attribute will reside in the root group.
 
