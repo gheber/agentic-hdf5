@@ -1,0 +1,13 @@
+{
+  "name": "agentic-hdf5",
+  "owner": {
+    "name": "Matthew Larson"
+  },
+  "plugins": [
+    {
+      "name": "ahdf5-plugin",
+      "source": "./plugin",
+      "description": "HDF5 tools and expert knowledge for agentic workflows"
+    }
+  ]
+}
