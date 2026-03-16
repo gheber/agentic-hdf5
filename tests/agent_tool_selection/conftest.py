@@ -60,8 +60,27 @@ Respond with ONLY this exact format, nothing else:
 SELECTED_TOOL: <tool_name>"""
 
 
-def _build_system_prompt(catalog):
-    """Build system prompt with tool catalog inlined."""
+# --- Prompt modes ---
+
+def _build_verbose_prompt(catalog):
+    """Build verbose system prompt: description + detailed_description + keywords + use_cases."""
+    tool_lines = []
+    for tool in catalog["tools"]:
+        keywords = ", ".join(tool.get("search_keywords", []))
+        use_cases = "; ".join(tool.get("use_cases", []))
+        detailed = tool.get("detailed_description", "")
+        entry = f"- {tool['name']}: {tool['description']}"
+        if detailed:
+            entry += f" {detailed}"
+        entry += f" (keywords: {keywords})"
+        if use_cases:
+            entry += f" (use cases: {use_cases})"
+        tool_lines.append(entry)
+    return "\n".join(tool_lines)
+
+
+def _build_original_prompt(catalog):
+    """Build original system prompt: description + keywords only."""
     tool_lines = []
     for tool in catalog["tools"]:
         keywords = ", ".join(tool.get("search_keywords", []))
@@ -69,7 +88,19 @@ def _build_system_prompt(catalog):
             f"- {tool['name']}: {tool['description']} "
             f"(keywords: {keywords})"
         )
-    descriptions = "\n".join(tool_lines)
+    return "\n".join(tool_lines)
+
+
+PROMPT_MODES = {
+    "original": _build_original_prompt,
+    "verbose": _build_verbose_prompt,
+}
+
+
+def _build_system_prompt(catalog, mode="verbose"):
+    """Build system prompt using the specified mode."""
+    builder = PROMPT_MODES.get(mode, _build_verbose_prompt)
+    descriptions = builder(catalog)
     return SYSTEM_PROMPT.format(tool_descriptions=descriptions)
 
 
@@ -83,6 +114,13 @@ def pytest_addoption(parser):
         default=DEFAULT_MODEL,
         help=f"Claude model to use for agent tests (default: {DEFAULT_MODEL})",
     )
+    parser.addoption(
+        "--prompt-mode",
+        action="store",
+        default="verbose",
+        choices=["original", "verbose"],
+        help="Prompt mode: original (desc+keywords only), verbose (all catalog fields)",
+    )
 
 
 @pytest.fixture(scope="session")
@@ -91,17 +129,21 @@ def model(request):
     return request.config.getoption("--model")
 
 
-def run_agent_turn(user_prompt, catalog, model=DEFAULT_MODEL, timeout=60):
+@pytest.fixture(scope="session")
+def prompt_mode(request):
+    """The prompt mode to use, from --prompt-mode flag."""
+    return request.config.getoption("--prompt-mode")
+
+
+def run_agent_turn(user_prompt, catalog, model=DEFAULT_MODEL, prompt_mode="verbose", timeout=60):
     """
     Send a prompt to the claude CLI in print mode and return the response text.
-
-    Uses --system-prompt to inject the tool catalog, --no-session-persistence
-    to avoid cluttering session history, and --tools "" to disable built-in
-    tools so Claude just reasons over the catalog we provide.
 
     Args:
         user_prompt: The natural language prompt to send.
         catalog: The loaded tool catalog dict.
+        model: Claude model alias or ID.
+        prompt_mode: One of "original", "verbose", "compressed".
         timeout: Subprocess timeout in seconds.
 
     Returns:
@@ -110,7 +152,7 @@ def run_agent_turn(user_prompt, catalog, model=DEFAULT_MODEL, timeout=60):
     Raises:
         RuntimeError: If the CLI invocation fails.
     """
-    system_prompt = _build_system_prompt(catalog)
+    system_prompt = _build_system_prompt(catalog, mode=prompt_mode)
 
     cmd = [
         "claude",

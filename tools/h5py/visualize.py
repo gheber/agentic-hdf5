@@ -37,46 +37,9 @@ def visualize(
     save_path: Optional[str] = None
 ) -> dict:
     """
-    Generate a visualization (PNG image) of an HDF5 dataset.
+    Generate PNG plot of HDF5 dataset. Auto-selects type: line|scatter|hist|pcolormesh|imshow|contour. Supports HDF5-level slicing for large data.
 
-    Automatically selects appropriate plot types (line, histogram, heatmap, contour, etc.)
-    based on data dimensionality and semantic metadata, or accepts explicit plot type
-    specification. Supports memory-efficient HDF5-level slicing for large datasets,
-    dimension selection, and axis scaling. Designed to work with get_object_metadata()
-    and read_semantic_metadata() to make informed visualization decisions.
-
-    VISUALIZATION DECISION GUIDE:
-
-    1. ALWAYS call get_object_metadata() first to understand data shape and dimensions
-    2. READ semantic metadata with read_semantic_metadata() to inform plot choices
-
-    PLOT TYPE SELECTION (based on dimensionality):
-    - 1D data: Use 'line' for time series or ordered data, 'hist' for distributions
-    - 2D data: Use 'pcolormesh' for regular grids, 'imshow' for image-like data (faster),
-               'contour'/'contourf' for smooth fields
-    - Use 'auto' (default) to let the function choose based on dimensionality
-
-    HDF5 SLICING (memory efficient, applied before loading):
-    - Use hdf5_slices to select subsets: {0: slice(0, 100), 1: slice(None), 2: 50}
-    - Keys are dimension indices (0=first dim, 1=second dim, etc.)
-    - Values can be: slice objects, integers, or slice(None) for entire dimension
-    - Example: {0: slice(0, 1000), 2: 0} selects first 1000 along dim 0, index 0 along dim 2
-
-    DIMENSION SELECTION (xarray-level):
-    - x/y: Specify which dimension names to plot on each axis
-    - For 2D plots, if x/y not specified, uses first two dimensions by default
-    - For 1D plots, uses the single dimension automatically
-
-    SCALE SELECTION:
-    - Use xscale='log' or yscale='log' when data spans multiple orders of magnitude
-    - Check SMD for hints about appropriate scaling (e.g., logarithmic phenomena)
-
-    WORKFLOW:
-    1. get_object_metadata(filepath, object_path) - understand shape/dims
-    2. read_semantic_metadata(filepath, object_path) - understand meaning
-    3. Decide plot_type based on dimensionality and semantics
-    4. Use hdf5_slices if dataset is very large (check shape in metadata)
-    5. Call visualize() with appropriate parameters
+    1D→line/hist, 2D→pcolormesh/imshow/contour. Use hdf5_slices for memory-efficient subsetting. Call get_object_metadata() first to check shape.
 
     Args:
         filepath: Path to HDF5 file

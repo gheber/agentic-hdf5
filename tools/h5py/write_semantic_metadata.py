@@ -21,11 +21,9 @@ except ImportError:
 def write_semantic_metadata(filepath: str, object_path: str,
                             smd_value: str, is_best_guess: bool = True) -> str:
     """
-    Write or update the semantic metadata attribute for a single HDF5 object.
+    Write/update SMD text description for one HDF5 object. Document, annotate, or label datasets/groups.
 
-    By default, prefixes content with "BEST GUESS: " to indicate inferred metadata,
-    though this can be disabled when writing verified ground-truth information.
-    Acts on a single object only (not recursive).
+    Prefixes with "BEST GUESS: " by default (disable for verified info). Single object only.
 
     Args:
         filepath: Path to the HDF5 file

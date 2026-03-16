@@ -21,11 +21,9 @@ except ImportError:
 )
 def write_smd_batch(filepath: str, smd_map: dict, is_best_guess: bool = True) -> dict:
     """
-    Write semantic metadata for multiple objects simultaneously in a single transaction.
+    Write SMD for multiple objects in one transaction. Pair with collect_objects_for_smd() for bulk annotation.
 
-    Designed to work with collect_objects_for_smd() in an iterative workflow for
-    efficiently generating SMD across an entire file. Continues processing even if
-    individual writes fail, returning detailed success/failure information for each object.
+    Continues on individual failures, returns per-object success/failure details.
 
     Args:
         filepath: Path to the HDF5 file

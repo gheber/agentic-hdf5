@@ -23,11 +23,9 @@ except ImportError:
 def collect_objects_for_smd(filepath: str, object_path: str = "/",
                             max_depth: int = -1) -> dict:
     """
-    Scan the file structure and collect a batch of objects that lack semantic metadata.
+    Scan file for objects missing SMD. Returns batch with structural metadata for auto-generating descriptions.
 
-    Returns up to SMD_GENERATION_BATCH_SIZE objects along with their structural metadata
-    (type, shape, attributes, etc.), enabling an agent to generate appropriate SMD for each.
-    Recursively processes groups. Designed for iterative SMD generation workflows.
+    Iterative workflow: call this → generate SMD → write_smd_batch() → repeat until empty batch.
 
     This enables an iterative workflow:
     1. Agent calls this function to get a batch of objects

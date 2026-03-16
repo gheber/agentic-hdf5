@@ -37,12 +37,9 @@ def query_semantic_metadata(
     embedder_model: str | None = None
 ) -> dict:
     """
-    Perform natural language semantic search over vectorized semantic metadata.
+    Natural language search over vectorized SMD. Find datasets by meaning (e.g. "ocean temperature") without knowing paths.
 
-    Takes a query string (e.g., "temperature in Celsius") and returns the top-k
-    most semantically similar objects from the file based on their SMD. Requires
-    that vectorize_semantic_metadata() has been run first. Supports filtering by
-    path prefix and minimum similarity score thresholds.
+    Returns top-k most similar objects. Requires vectorize_semantic_metadata() first. Supports path prefix filter and min score threshold.
 
     Args:
         filepath: Path to the HDF5 file

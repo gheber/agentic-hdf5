@@ -92,3 +92,20 @@ See `docs/vectorized-semantic-metadata.md` for the design document.
 ```bash
 python -m pytest tests/
 ```
+
+### Agent Tool Selection Evaluation
+
+The `tests/agent_tool_selection/` suite evaluates whether Claude models correctly identify the right HDF5 tool from natural language prompts. Run from a normal terminal (not inside Claude Code):
+
+```bash
+pytest -m agent tests/agent_tool_selection/ -v --model haiku
+```
+
+| Date | Model | Parameters | Score |
+|------|-------|------------|-------|
+| 2026-03-16 | Claude Opus 4.6 | Not disclosed | 7/7 (100%) |
+| 2026-03-16 | Claude Sonnet 4.6 | Not disclosed | 7/7 (100%) |
+| 2026-03-16 | Claude Haiku 4.5 | Not disclosed | 7/7 (100%) |
+| 2026-03-16 | Claude 3 Haiku | ~20B (est.) | 7/7 (100%) |
+
+See `tests/agent_tool_selection/RESULTS.md` for full methodology and detailed results across prompt modes.

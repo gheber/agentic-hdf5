@@ -29,18 +29,9 @@ def rechunk_dataset(
     make_contiguous: bool = False
 ) -> dict:
     """
-    Modify the chunking layout of an HDF5 dataset by creating a new file.
+    Change chunk layout/size to optimize I/O. Supports larger|smaller|half|double|exact dims|contiguous. Creates new file via h5repack.
 
-    Supports high-level adjustments ('larger', 'smaller', 'half', 'double') or exact
-    chunk dimension specifications. Can also convert chunked datasets to contiguous layout.
-    Creates a NEW file using h5repack (original NOT modified). Call get_object_metadata()
-    first to understand current chunk configuration.
-
-    Usage patterns:
-    1. Simple adjustments: chunk_adjustment='larger' or 'smaller' (doubles/halves all dims)
-    2. Specific multipliers: chunk_adjustment='double' or 'half'
-    3. Exact dimensions: chunk_dims='10x20x30' (for 3D dataset)
-    4. Remove chunking: make_contiguous=True
+    Call get_object_metadata() first to check current chunks. Adjustments: chunk_adjustment='larger'|'smaller'|'half'|'double', chunk_dims='10x20x30', or make_contiguous=True.
 
     Args:
         filepath: Path to input HDF5 file

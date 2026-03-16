@@ -35,6 +35,7 @@ from tools.h5py import (
     vectorize_semantic_metadata as _vectorize_semantic_metadata,
     query_semantic_metadata as _query_semantic_metadata,
 )
+from tools.markdown_to_pdf import markdown_to_pdf as _markdown_to_pdf
 
 server = FastMCP("hdf5-tools")
 
@@ -217,6 +218,20 @@ def query_semantic_metadata(
     return _query_semantic_metadata(
         filepath, query_text, top_k, object_filter, min_score, embedder_model
     )
+
+
+@server.tool()
+def markdown_to_pdf(
+    input_path: str,
+    output_path: Optional[str] = None,
+    engine: str = "pdflatex",
+    extra_args: Optional[str] = None,
+) -> dict:
+    """Convert a Markdown file to PDF via pandoc + LaTeX. Handles LaTeX math, tables, code blocks, and all standard Markdown natively."""
+    parsed_extra = None
+    if extra_args is not None:
+        parsed_extra = json.loads(extra_args) if isinstance(extra_args, str) else extra_args
+    return _markdown_to_pdf(input_path, output_path, engine, parsed_extra)
 
 
 def main():

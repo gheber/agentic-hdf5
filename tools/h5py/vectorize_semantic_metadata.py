@@ -37,12 +37,9 @@ def vectorize_semantic_metadata(
     object_paths: list[str] | None = None
 ) -> dict:
     """
-    Convert all text-based semantic metadata into searchable vector embeddings.
+    Convert SMD text to vector embeddings stored in HDF5 file. Prerequisite for query_semantic_metadata() search.
 
-    Reads all SMD attributes (ahdf5-smd-*), embeds them using a sentence transformer
-    model, and stores the resulting embeddings in a /ahdf5-vsmd group structure within
-    the file for efficient semantic search. Processes SMD in batches to manage memory
-    usage. Embeddings are L2-normalized to enable cosine similarity searches via dot product.
+    Embeds SMD via sentence-transformers, stores L2-normalized vectors in /ahdf5-vsmd group. Batch processing for memory efficiency.
 
     Args:
         filepath: Path to the HDF5 file

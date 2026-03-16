@@ -30,20 +30,9 @@ def apply_filter_dataset(
     remove_all_filters: bool = False
 ) -> dict:
     """
-    Apply, modify, or remove compression and filter settings on an HDF5 dataset.
+    Add/change/remove compression filters on HDF5 dataset. Shrink file size or decompress. Creates new file via h5repack.
 
-    Supports gzip, szip, shuffle, fletcher32, nbit, and scaleoffset filters. Creates
-    a NEW file using h5repack (original NOT modified). Call get_object_metadata() first
-    to understand current filter configuration.
-
-    Filter descriptions:
-    - gzip: General-purpose compression (level 1-9, higher=better compression but slower)
-    - szip: NASA-developed compression, patent-restricted (format: "pixels_per_block,coding" e.g. "8,NN")
-    - shuffle: Rearranges byte order to improve compression (use with gzip)
-    - fletcher32: Adds checksum for data integrity verification
-    - nbit: Packs data to use minimum bits
-    - scaleoffset: Lossy compression (format: "scale_factor,scale_type" e.g. "2,IN")
-    - none: Remove all filters (decompress)
+    Filters: gzip (level 1-9), szip (NASA), shuffle (byte reorder), fletcher32 (checksum), nbit (bit packing), scaleoffset (lossy), none (decompress).
 
     Args:
         filepath: Path to input HDF5 file

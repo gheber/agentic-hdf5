@@ -22,12 +22,9 @@ except ImportError:
 )
 def get_object_metadata(filepath: str, object_path: str) -> dict:
     """
-    Retrieve comprehensive metadata for a specific HDF5 object.
+    Inspect HDF5 object: returns shape, dtype, chunks, compression, attributes, storage size for datasets; member list for groups.
 
-    Returns information about type, shape, datatype, chunking, compression filters,
-    and other storage properties. For datasets: shape, dtype, chunks, compression
-    settings, fill value. For groups: member count and names. Essential for
-    understanding object properties before operations like visualization or optimization.
+    Use before visualization or optimization to understand object structure. Works on datasets, groups, committed datatypes.
 
     Args:
         filepath: Path to the HDF5 file

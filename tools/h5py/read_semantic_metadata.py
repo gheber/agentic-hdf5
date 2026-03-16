@@ -20,11 +20,9 @@ except ImportError:
 )
 def read_semantic_metadata(filepath: str, object_path: str) -> str:
     """
-    Read the semantic metadata attribute associated with a given object.
+    Read SMD text description of one HDF5 object. Returns what the object represents/means.
 
-    Returns the SMD text content if it exists, or an error/info message if the
-    object or its SMD attribute is not found. Acts on a single object only
-    (not recursive).
+    Returns SMD content if exists, error/info if not found. Single object only (not recursive).
 
     Args:
         filepath: Path to the HDF5 file

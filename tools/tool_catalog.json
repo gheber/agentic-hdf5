@@ -5,8 +5,8 @@
     {
       "name": "get_object_metadata",
       "import": "from tools.h5py.get_object_metadata import get_object_metadata",
-      "description": "Retrieve comprehensive metadata for a specific HDF5 object.",
-      "detailed_description": "Returns information about type, shape, datatype, chunking, compression filters, and other storage properties. For datasets: shape, dtype, chunks, compression settings, fill value. For groups: member count and names. Essential for understanding object properties before operations like visualization or optimization.",
+      "description": "Inspect HDF5 object: returns shape, dtype, chunks, compression, attributes, storage size for datasets; member list for groups.",
+      "detailed_description": "Use before visualization or optimization to understand object structure. Works on datasets, groups, committed datatypes.",
       "search_keywords": [
         "metadata",
         "inspect",
@@ -29,8 +29,8 @@
     {
       "name": "rechunk_dataset",
       "import": "from tools.h5py.rechunk_dataset import rechunk_dataset",
-      "description": "Modify the chunking layout of an HDF5 dataset by creating a new file.",
-      "detailed_description": "Supports high-level adjustments ('larger', 'smaller', 'half', 'double') or exact chunk dimension specifications. Can also convert chunked datasets to contiguous layout. Creates a NEW file using h5repack (original NOT modified). Call get_object_metadata() first to understand current chunk configuration.  Usage patterns: 1. Simple adjustments: chunk_adjustment='larger' or 'smaller' (doubles/halves all dims) 2. Specific multipliers: chunk_adjustment='double' or 'half' 3. Exact dimensions: chunk_dims='10x20x30' (for 3D dataset) 4. Remove chunking: make_contiguous=True",
+      "description": "Change chunk layout/size to optimize I/O. Supports larger|smaller|half|double|exact dims|contiguous. Creates new file via h5repack.",
+      "detailed_description": "Call get_object_metadata() first to check current chunks. Adjustments: chunk_adjustment='larger'|'smaller'|'half'|'double', chunk_dims='10x20x30', or make_contiguous=True.",
       "search_keywords": [
         "chunk",
         "rechunk",
@@ -52,8 +52,8 @@
     {
       "name": "apply_filter_dataset",
       "import": "from tools.h5py.apply_filter_dataset import apply_filter_dataset",
-      "description": "Apply, modify, or remove compression and filter settings on an HDF5 dataset.",
-      "detailed_description": "Supports gzip, szip, shuffle, fletcher32, nbit, and scaleoffset filters. Creates a NEW file using h5repack (original NOT modified). Call get_object_metadata() first to understand current filter configuration.  Filter descriptions: - gzip: General-purpose compression (level 1-9, higher=better compression but slower) - szip: NASA-developed compression, patent-restricted (format: \"pixels_per_block,coding\" e.g. \"8,NN\") - shuffle: Rearranges byte order to improve compression (use with gzip) - fletcher32: Adds checksum for data integrity verification - nbit: Packs data to use minimum bits - scaleoffset: Lossy compression (format: \"scale_factor,scale_type\" e.g. \"2,IN\") - none: Remove all filters (decompress)",
+      "description": "Add/change/remove compression filters on HDF5 dataset. Shrink file size or decompress. Creates new file via h5repack.",
+      "detailed_description": "Filters: gzip (level 1-9), szip (NASA), shuffle (byte reorder), fletcher32 (checksum), nbit (bit packing), scaleoffset (lossy), none (decompress).",
       "search_keywords": [
         "compress",
         "compression",
@@ -76,8 +76,8 @@
     {
       "name": "visualize",
       "import": "from tools.h5py.visualize import visualize",
-      "description": "Generate a visualization (PNG image) of an HDF5 dataset.",
-      "detailed_description": "Automatically selects appropriate plot types (line, histogram, heatmap, contour, etc.) based on data dimensionality and semantic metadata, or accepts explicit plot type specification. Supports memory-efficient HDF5-level slicing for large datasets, dimension selection, and axis scaling. Designed to work with get_object_metadata() and read_semantic_metadata() to make informed visualization decisions.  VISUALIZATION DECISION GUIDE:  1. ALWAYS call get_object_metadata() first to understand data shape and dimensions 2. READ semantic metadata with read_semantic_metadata() to inform plot choices  PLOT TYPE SELECTION (based on dimensionality): - 1D data: Use 'line' for time series or ordered data, 'hist' for distributions - 2D data: Use 'pcolormesh' for regular grids, 'imshow' for image-like data (faster), 'contour'/'contourf' for smooth fields - Use 'auto' (default) to let the function choose based on dimensionality  HDF5 SLICING (memory efficient, applied before loading): - Use hdf5_slices to select subsets: {0: slice(0, 100), 1: slice(None), 2: 50} - Keys are dimension indices (0=first dim, 1=second dim, etc.) - Values can be: slice objects, integers, or slice(None) for entire dimension - Example: {0: slice(0, 1000), 2: 0} selects first 1000 along dim 0, index 0 along dim 2  DIMENSION SELECTION (xarray-level): - x/y: Specify which dimension names to plot on each axis - For 2D plots, if x/y not specified, uses first two dimensions by default - For 1D plots, uses the single dimension automatically  SCALE SELECTION: - Use xscale='log' or yscale='log' when data spans multiple orders of magnitude - Check SMD for hints about appropriate scaling (e.g., logarithmic phenomena)  WORKFLOW: 1. get_object_metadata(filepath, object_path) - understand shape/dims 2. read_semantic_metadata(filepath, object_path) - understand meaning 3. Decide plot_type based on dimensionality and semantics 4. Use hdf5_slices if dataset is very large (check shape in metadata) 5. Call visualize() with appropriate parameters",
+      "description": "Generate PNG plot of HDF5 dataset. Auto-selects type: line|scatter|hist|pcolormesh|imshow|contour. Supports HDF5-level slicing for large data.",
+      "detailed_description": "1D\u2192line/hist, 2D\u2192pcolormesh/imshow/contour. Use hdf5_slices for memory-efficient subsetting. Call get_object_metadata() first to check shape.",
       "search_keywords": [
         "visualize",
         "plot",
@@ -101,8 +101,8 @@
     {
       "name": "read_semantic_metadata",
       "import": "from tools.h5py.read_semantic_metadata import read_semantic_metadata",
-      "description": "Read the semantic metadata attribute associated with a given object.",
-      "detailed_description": "Returns the SMD text content if it exists, or an error/info message if the object or its SMD attribute is not found. Acts on a single object only (not recursive).",
+      "description": "Read SMD text description of one HDF5 object. Returns what the object represents/means.",
+      "detailed_description": "Returns SMD content if exists, error/info if not found. Single object only (not recursive).",
       "search_keywords": [
         "semantic",
         "metadata",
@@ -124,8 +124,8 @@
     {
       "name": "write_semantic_metadata",
       "import": "from tools.h5py.write_semantic_metadata import write_semantic_metadata",
-      "description": "Write or update the semantic metadata attribute for a single HDF5 object.",
-      "detailed_description": "By default, prefixes content with \"BEST GUESS: \" to indicate inferred metadata, though this can be disabled when writing verified ground-truth information. Acts on a single object only (not recursive).",
+      "description": "Write/update SMD text description for one HDF5 object. Document, annotate, or label datasets/groups.",
+      "detailed_description": "Prefixes with \"BEST GUESS: \" by default (disable for verified info). Single object only.",
       "search_keywords": [
         "semantic",
         "metadata",
@@ -147,8 +147,8 @@
     {
       "name": "collect_objects_for_smd",
       "import": "from tools.h5py.collect_objects_for_smd import collect_objects_for_smd",
-      "description": "Scan the file structure and collect a batch of objects that lack semantic metadata.",
-      "detailed_description": "Returns up to SMD_GENERATION_BATCH_SIZE objects along with their structural metadata (type, shape, attributes, etc.), enabling an agent to generate appropriate SMD for each. Recursively processes groups. Designed for iterative SMD generation workflows.  This enables an iterative workflow: 1. Agent calls this function to get a batch of objects 2. Agent generates SMD for each object based on metadata 3. Agent calls write_smd_batch() to save the SMD 4. Agent repeats until this function returns an empty batch",
+      "description": "Scan file for objects missing SMD. Returns batch with structural metadata for auto-generating descriptions.",
+      "detailed_description": "Iterative workflow: call this \u2192 generate SMD \u2192 write_smd_batch() \u2192 repeat until empty batch.  This enables an iterative workflow: 1. Agent calls this function to get a batch of objects 2. Agent generates SMD for each object based on metadata 3. Agent calls write_smd_batch() to save the SMD 4. Agent repeats until this function returns an empty batch",
       "search_keywords": [
         "collect",
         "batch",
@@ -170,8 +170,8 @@
     {
       "name": "write_smd_batch",
       "import": "from tools.h5py.write_smd_batch import write_smd_batch",
-      "description": "Write semantic metadata for multiple objects simultaneously in a single transaction.",
-      "detailed_description": "Designed to work with collect_objects_for_smd() in an iterative workflow for efficiently generating SMD across an entire file. Continues processing even if individual writes fail, returning detailed success/failure information for each object.",
+      "description": "Write SMD for multiple objects in one transaction. Pair with collect_objects_for_smd() for bulk annotation.",
+      "detailed_description": "Continues on individual failures, returns per-object success/failure details.",
       "search_keywords": [
         "batch",
         "write",
@@ -192,8 +192,8 @@
     {
       "name": "vectorize_semantic_metadata",
       "import": "from tools.h5py.vectorize_semantic_metadata import vectorize_semantic_metadata",
-      "description": "Convert all text-based semantic metadata into searchable vector embeddings.",
-      "detailed_description": "Reads all SMD attributes (ahdf5-smd-*), embeds them using a sentence transformer model, and stores the resulting embeddings in a /ahdf5-vsmd group structure within the file for efficient semantic search. Processes SMD in batches to manage memory usage. Embeddings are L2-normalized to enable cosine similarity searches via dot product.",
+      "description": "Convert SMD text to vector embeddings stored in HDF5 file. Prerequisite for query_semantic_metadata() search.",
+      "detailed_description": "Embeds SMD via sentence-transformers, stores L2-normalized vectors in /ahdf5-vsmd group. Batch processing for memory efficiency.",
       "search_keywords": [
         "vectorize",
         "embed",
@@ -215,8 +215,8 @@
     {
       "name": "query_semantic_metadata",
       "import": "from tools.h5py.query_semantic_metadata import query_semantic_metadata",
-      "description": "Perform natural language semantic search over vectorized semantic metadata.",
-      "detailed_description": "Takes a query string (e.g., \"temperature in Celsius\") and returns the top-k most semantically similar objects from the file based on their SMD. Requires that vectorize_semantic_metadata() has been run first. Supports filtering by path prefix and minimum similarity score thresholds.",
+      "description": "Natural language search over vectorized SMD. Find datasets by meaning (e.g. \"ocean temperature\") without knowing paths.",
+      "detailed_description": "Returns top-k most similar objects. Requires vectorize_semantic_metadata() first. Supports path prefix filter and min score threshold.",
       "search_keywords": [
         "search",
         "query",
