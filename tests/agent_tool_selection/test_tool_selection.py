@@ -76,10 +76,10 @@ class TestToolSelection:
         ids=CASE_IDS,
     )
     def test_individual_selection(
-        self, catalog, model, prompt_mode, user_prompt, expected_tools
+        self, catalog, model, user_prompt, expected_tools
     ):
         """Test that Claude selects an acceptable tool for each prompt."""
-        response = run_agent_turn(user_prompt, catalog, model=model, prompt_mode=prompt_mode)
+        response = run_agent_turn(user_prompt, catalog, model=model)
         selected = extract_selected_tool(response)
 
         assert selected is not None, (
