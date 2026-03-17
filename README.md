@@ -5,9 +5,13 @@
 
 A set of expansions and tools for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) that enable AI agents to work at a high level with HDF5 data and files. Provides 10+ tools, 14+ skills, support for semantic metadata, and natural language search of vectorized semantic metadata.
 
+## Prerequisites
+
+[Claude Code](https://docs.anthropic.com/en/docs/claude-code) must be installed. The MCP server is fetched and run via [`uvx`](https://docs.astral.sh/uv/), so `uv` must also be installed — all Python dependencies (h5py, numpy, matplotlib, etc.) are resolved automatically.
+
 ## Installation
 
-Install the plugin in [Claude Code](https://docs.anthropic.com/en/docs/claude-code):
+Run these [slash commands](https://docs.anthropic.com/en/docs/claude-code/cli-reference#slash-commands) inside a Claude Code session to register the plugin marketplace and install the plugin:
 
 ```bash
 # Add the marketplace (one-time)
@@ -17,12 +21,13 @@ Install the plugin in [Claude Code](https://docs.anthropic.com/en/docs/claude-co
 /plugin install ahdf5-plugin@agentic-hdf5
 ```
 
-This gives you all 14+ skills and 10 MCP tools automatically. The MCP server is fetched and run via `uvx`.
+This gives you all 14+ skills and 10 MCP tools automatically.
 
-For development/testing, you can load the plugin directly:
+For development/testing, clone the repo and load the plugin directly:
 
 ```bash
-claude --plugin-dir ./plugin
+git clone https://github.com/mattjala/agentic-hdf5.git
+claude --plugin-dir ./agentic-hdf5/plugin
 ```
 
 ## Architecture

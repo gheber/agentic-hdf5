@@ -4,8 +4,8 @@ This plugin provides HDF5 tools and expert knowledge for agentic workflows.
 
 ## Features
 
-- **10 MCP tools** for HDF5 inspection, optimization, visualization, and semantic metadata
-- **13 skills** providing expert knowledge on chunking, compression, parallel I/O, cloud optimization, and more
+- **8+ MCP tools** for HDF5 inspection, optimization, visualization, and semantic metadata
+- **10+ skills** providing expert knowledge on chunking, compression, parallel I/O, cloud optimization, and more
 
 ## Installation
 
