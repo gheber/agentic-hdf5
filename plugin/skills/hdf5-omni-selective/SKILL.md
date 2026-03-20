@@ -1,6 +1,6 @@
 ---
 name: hdf5-omni-selective
-description: This skill should be used when the user asks about "OMNI file", "OMNI YAML", "selective HDF5 download", "IOWarp assimilation", "CAE", "context assimilation engine", "download only needed datasets", mentions creating an OMNI configuration for HDF5 data, wants to avoid downloading unnecessary data from an HDF5 file, or needs to identify which HDF5 datasets are required for a specific figure, paper, or analysis.
+description: "OMNI file", "OMNI YAML", "selective HDF5 download", "IOWarp assimilation", "CAE", "context assimilation engine", "download only needed datasets", creating an OMNI configuration for HDF5 data, avoiding unnecessary data from an HDF5 file, identifying HDF5 datasets are required for a figure/paper/analysis.
 version: 0.1.0
 ---
 
@@ -8,7 +8,7 @@ version: 0.1.0
 
 ## Purpose
 
-Generate IOWarp OMNI YAML files that selectively ingest **only the HDF5 datasets needed** for a specific figure, paper, or analysis — avoiding costly transfer of unused data.
+Generate IOWarp OMNI YAML files that selectively ingest **only the HDF5 datasets needed** for a figure/paper/analysis — avoiding costly transfer of unused data.
 
 **Context**: IOWarp's Context Assimilation Engine (CAE) uses OMNI YAML files to describe data transfers. For HDF5 files, the CAE recursively discovers datasets and loads them into CTE (Content Transformation Engine) tags. Without filtering, it loads *everything*. For large scientific files (GB+), this wastes bandwidth and memory.
 

@@ -1,6 +1,6 @@
 ---
 name: hdf5-filters
-description: This skill should be used when the user asks to "compress dataset", "reduce file size", "apply GZIP", "add shuffle filter", "use SZIP", mentions compression levels, filters, or needs guidance on HDF5 compression strategies and filter selection.
+description: "compress dataset", "reduce file size", "apply GZIP", "add shuffle filter", "use SZIP", compression levels, filters, HDF5 compression strategies and filter selection.
 version: 0.1.0
 ---
 

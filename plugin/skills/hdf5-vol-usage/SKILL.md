@@ -1,6 +1,6 @@
 ---
 name: hdf5-vol-usage
-description: This skill should be used when the user asks about "using VOL connector", "VOL usage", "how to use DAOS/Async/Cache/REST VOL", "switching to VOL connector", "HDF5_VOL_CONNECTOR environment variable", mentions registering or configuring VOL connectors in applications, or needs guidance on using existing VOL connectors.
+description: "using VOL connector", "VOL usage", "how to use DAOS/Async/Cache/REST VOL", "switching to VOL connector", "HDF5_VOL_CONNECTOR environment variable", registering/configuring VOL connectors in applications.
 version: 0.1.0
 ---
 

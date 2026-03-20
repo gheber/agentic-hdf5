@@ -1,6 +1,6 @@
 ---
 name: hdf5-io
-description: This skill should be used when the user asks about "HDF5 write performance", "buffered I/O", "slow writes", "file access optimization", "H5TOOLS_BUFSIZE", mentions performance tuning, buffer sizes, or needs guidance on general HDF5 I/O optimization strategies not specific to chunking or compression.
+description: "HDF5 write performance", "buffered I/O", "slow writes", "file access optimization", "H5TOOLS_BUFSIZE", performance tuning, buffer sizes, general HDF5 I/O optimization strategies not specific to chunking or compression.
 version: 0.1.0
 ---
 

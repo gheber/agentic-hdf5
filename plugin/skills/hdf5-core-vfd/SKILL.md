@@ -1,6 +1,6 @@
 ---
 name: hdf5-core-vfd
-description: This skill should be used when the user asks about "Core VFD", "memory file driver", "in-memory HDF5", "RAM disk", "temporary HDF5 files", "backing_store", mentions storing HDF5 files in memory, or needs fast temporary file operations without disk I/O.
+description: "Core VFD", "memory file driver", "in-memory HDF5", "RAM disk", "temporary HDF5 files", "backing_store", storing HDF5 files in memory, fast temporary file operations without disk I/O.
 version: 0.1.0
 ---
 

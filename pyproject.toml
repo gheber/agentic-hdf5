@@ -1,8 +1,26 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "agentic-hdf5"
 version = "0.1.0"
 description = "HDF5 tools and semantic metadata for agentic workflows"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Matthew Larson" },
+]
 requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+]
 dependencies = [
     "h5py",
     "numpy",
@@ -16,8 +34,16 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest"]
 
+[project.urls]
+Homepage = "https://github.com/mattjala/agentic-hdf5"
+Repository = "https://github.com/mattjala/agentic-hdf5"
+Issues = "https://github.com/mattjala/agentic-hdf5/issues"
+
 [tool.setuptools.packages.find]
 include = ["tools*"]
+
+[tool.setuptools.package-data]
+tools = ["*.json"]
 
 [project.scripts]
 hdf5-mcp-server = "tools.mcp_server:main"

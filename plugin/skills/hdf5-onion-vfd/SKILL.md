@@ -1,6 +1,6 @@
 ---
 name: hdf5-onion-vfd
-description: This skill should be used when the user asks about "Onion VFD", "HDF5 file versioning", "revision history", "HDF5 rollback", "H5Pset_fapl_onion", "onion virtual file driver", "file-level revisions", mentions accessing historical HDF5 file states, or needs guidance on in-file revision tracking with HDF5.
+description: "Onion VFD", "HDF5 file versioning", "revision history", "HDF5 rollback", "H5Pset_fapl_onion", "onion virtual file driver", "file-level revisions", accessing historical HDF5 file states, in-file revision tracking with HDF5.
 version: 0.1.0
 ---
 

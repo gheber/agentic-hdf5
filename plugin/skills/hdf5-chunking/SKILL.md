@@ -1,6 +1,6 @@
 ---
 name: hdf5-chunking
-description: This skill should be used when the user asks to "rechunk dataset", "optimize chunk size", "fix chunk layout", "align chunks", mentions "chunk cache", "slow partial reads", "chunk overhead", or needs guidance on chunking strategies and storage layouts for HDF5 files.
+description: "rechunk dataset", "optimize chunk size", "fix chunk layout", "align chunks", "chunk cache", "slow partial reads", "chunk overhead", chunking strategies and storage layouts for HDF5 files.
 version: 0.1.0
 ---
 

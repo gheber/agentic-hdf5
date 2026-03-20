@@ -1,6 +1,6 @@
 ---
 name: hdf5-hsds
-description: This skill should be used when the user asks about "HSDS", "Highly Scalable Data Service", "h5pyd", "HDF5 REST", "HDF5 cloud service", "HDF5 as a service", "hsload", "hsget", "hsls", "hsconfigure", mentions accessing HDF5 data via a REST API, using HDF5 with S3/Azure/cloud object storage through a service layer, or needs guidance on setting up or using HSDS and h5pyd.
+description: "HSDS", "Highly Scalable Data Service", "h5pyd", "HDF5 REST", "HDF5 cloud service", "HDF5 as a service", "hsload", "hsget", "hsls", "hsconfigure", HDF5 via REST API, HDF5 with S3/Azure through a service layer.
 version: 0.1.0
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: hdf5-ros3-vfd
-description: This skill should be used when the user asks about "ros3 VFD", "read-only S3", "HDF5 from S3", "H5Pset_fapl_ros3", "S3 byte-range", "remote HDF5 access", "HDF5 S3 driver", mentions reading HDF5 files directly from Amazon S3 or S3-compatible object storage, or needs guidance on configuring the ros3 virtual file driver.
+description: "ros3 VFD", "read-only S3", "HDF5 from S3", "H5Pset_fapl_ros3", "S3 byte-range", "remote HDF5 access", "HDF5 S3 driver", reading HDF5 from Amazon S3 or S3-compatible storage, configuring ros3 driver.
 version: 0.1.0
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: hdf5-cloud-optimized
-description: This skill should be used when the user asks about "cloud-optimized HDF5", "HDF5 on S3", "HDF5 cloud storage", "paged aggregation", "ros3 VFD", "byte-range requests", "HTTP range GET", mentions accessing HDF5 from object storage, cloud performance issues, or needs guidance on writing HDF5 files optimized for cloud/remote access.
+description: "cloud-optimized HDF5", "HDF5 on S3", "HDF5 cloud storage", "paged aggregation", "ros3 VFD", "byte-range requests", "HTTP range GET", object storage access, cloud performance, writing HDF5 optimized for cloud/remote access.
 version: 0.1.0
 ---
 
