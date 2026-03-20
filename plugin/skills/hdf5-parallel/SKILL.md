@@ -1,6 +1,6 @@
 ---
 name: hdf5-parallel
-description: This skill should be used when the user asks about "Parallel HDF5", "MPI-IO", "collective I/O", "independent I/O", "H5Pset_fapl_mpio", "H5Pset_dxpl_mpio", "parallel file access", "distributed HDF5", mentions multi-process HDF5 operations, MPI communicators, or needs guidance on parallel HDF5 programming patterns and best practices.
+description: "Parallel HDF5", "MPI-IO", "collective I/O", "independent I/O", "H5Pset_fapl_mpio", "H5Pset_dxpl_mpio", "parallel file access", "distributed HDF5", multi-process HDF5, MPI communicators, parallel HDF5 programming patterns.
 version: 0.1.0
 ---
 

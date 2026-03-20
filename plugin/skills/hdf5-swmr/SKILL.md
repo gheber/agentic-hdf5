@@ -1,6 +1,6 @@
 ---
 name: hdf5-swmr
-description: This skill should be used when the user asks about "SWMR", "Single Writer Multiple Reader", "concurrent HDF5 access", "real-time HDF5", "streaming to HDF5", "multiple readers one writer", mentions reading while writing HDF5 files, or needs guidance on concurrent file access without locks.
+description: "SWMR", "Single Writer Multiple Reader", "concurrent HDF5 access", "real-time HDF5", "streaming to HDF5", "multiple readers one writer", reading while writing HDF5 files, concurrent file access without locks.
 version: 0.1.0
 ---
 

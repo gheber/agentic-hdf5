@@ -1,6 +1,6 @@
 ---
 name: hdf5-scientific-publishing
-description: This skill should be used when the user asks about "HDF5 DOI", "cite HDF5 data", "publish HDF5 to Zenodo", "upload to Dataverse", "FAIR HDF5", "reproducible HDF5", "find HDF5 dataset from paper", "download data from DOI", "HDF5 metadata for publication", "scientific data repository", mentions depositing or retrieving HDF5 files from repositories like Zenodo/Figshare/Dataverse/Earthdata, or needs guidance on making HDF5 data findable, citable, and reproducible in a scientific context.
+description: "HDF5 DOI", "cite HDF5 data", "publish HDF5 to Zenodo", "upload to Dataverse", "FAIR HDF5", "reproducible HDF5", "find HDF5 dataset from paper", "download data from DOI", "HDF5 metadata for publication", "scientific data repository", depositing/retrieving HDF5 from Zenodo/Figshare/Dataverse/Earthdata, FAIR-compliant HDF5.
 version: 0.1.0
 ---
 

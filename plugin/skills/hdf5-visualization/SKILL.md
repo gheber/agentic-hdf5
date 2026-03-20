@@ -1,6 +1,6 @@
 ---
 name: hdf5-visualization
-description: This skill should be used when the user asks to "visualize HDF5 data", "plot a dataset", "create a graph", "show a heatmap", "make a histogram", "plot time series", "visualize temperature/sensor/array data", or requests any data visualization from HDF5 files. Provides guidance on choosing appropriate plot types based on data characteristics and implementing matplotlib visualizations.
+description: "visualize HDF5 data", "plot a dataset", "create a graph", "show a heatmap", "make a histogram", "plot time series", "visualize temperature/sensor/array data", any data visualization from HDF5 files, choosing plot types, matplotlib.
 version: 0.1.0
 ---
 
@@ -8,7 +8,7 @@ version: 0.1.0
 
 ## Purpose
 
-This skill provides guidance for creating effective data visualizations from HDF5 files using matplotlib. It focuses on analyzing data characteristics to choose appropriate plot types and implementing flexible visualization scripts.
+This skill provides guidance for creating effective data visualizations from HDF5 files using matplotlib. It focuses on analyzing data characteristics to choose appropriate plot types, flexible visualization scripts.
 
 ## Core Concepts
 

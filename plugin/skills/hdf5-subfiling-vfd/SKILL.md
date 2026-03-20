@@ -1,6 +1,6 @@
 ---
 name: hdf5-subfiling-vfd
-description: This skill should be used when the user asks about "Subfiling VFD", "subfiling driver", "HDF5 subfiles", "I/O concentrators", "H5Pset_fapl_subfiling", "striped HDF5", "HDF5 parallel file splitting", mentions distributing HDF5 files across subfiles for parallel I/O, or needs guidance on the subfiling virtual file driver for large-scale parallel workloads.
+description: "Subfiling VFD", "subfiling driver", "HDF5 subfiles", "I/O concentrators", "H5Pset_fapl_subfiling", "striped HDF5", "HDF5 parallel file splitting", distributing HDF5 across subfiles for parallel I/O, large-scale parallel workloads.
 version: 0.1.0
 ---
 

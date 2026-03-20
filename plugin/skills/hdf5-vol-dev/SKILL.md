@@ -1,6 +1,6 @@
 ---
 name: hdf5-vol-dev
-description: This skill should be used when the user asks about "developing VOL connector", "creating VOL connector", "VOL connector development", "H5VL_class_t", "VOL callbacks", "terminal vs pass-through connector", mentions implementing VOL connector callbacks or needs guidance on developing custom HDF5 VOL connectors.
+description: "developing VOL connector", "creating VOL connector", "VOL connector development", "H5VL_class_t", "VOL callbacks", "terminal vs pass-through connector", implementing VOL connector callbacks, developing custom HDF5 VOL connectors.
 version: 0.1.0
 ---
 

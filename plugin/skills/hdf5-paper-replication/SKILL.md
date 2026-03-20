@@ -1,6 +1,6 @@
 ---
 name: hdf5-paper-replication
-description: This skill should be used when the user asks to "replicate a paper", "reproduce paper results", "check paper conclusions", "analyze scientific paper data", "verify paper findings", mentions replicating or reproducing scientific results from a paper that may use HDF5 data, or wants to determine if a paper's analysis can be reproduced from its underlying data.
+description: "replicate a paper", "reproduce paper results", "check paper conclusions", "analyze scientific paper data", "verify paper findings", replicating/reproducing scientific results from papers using HDF5 data.
 version: 0.2.0
 ---
 

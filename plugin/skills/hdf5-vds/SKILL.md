@@ -1,6 +1,6 @@
 ---
 name: hdf5-vds
-description: This skill should be used when the user asks about "virtual datasets", "VDS", "combine multiple HDF5 files", "access distributed data", "stacking datasets", "concatenating files", or needs to create unified views of data spread across multiple HDF5 files without copying data.
+description: "virtual datasets", "VDS", "combine multiple HDF5 files", "access distributed data", "stacking datasets", "concatenating files", create unified views of data spread across multiple HDF5 files without copying data.
 version: 0.1.0
 ---
 
