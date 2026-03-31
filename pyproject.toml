@@ -29,6 +29,7 @@ dependencies = [
     "tqdm",
     "mcp",
     "fastembed",
+    "netCDF4",
 ]
 
 [project.optional-dependencies]
