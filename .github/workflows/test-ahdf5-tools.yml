@@ -101,16 +101,6 @@ jobs:
           pip install -e .
           timeout 5 hdf5-mcp-server || [ $? -eq 124 ]
 
-      - name: Install CodeClimate test reporter
-        run: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-          chmod +x ./cc-test-reporter
-
-      - name: CodeClimate before-build
-        run: ./cc-test-reporter before-build
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-
       - name: Run tests with coverage
         run: |
           # Skip filter tests due to inconsistent h5repack filter availability in GitHub Actions.
@@ -125,12 +115,6 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
           fail_ci_if_error: false
-
-      - name: CodeClimate after-build
-        if: always()
-        run: ./cc-test-reporter after-build --coverage-input-type coverage.py
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
 
       - name: Save HDF5 cache
         uses: actions/cache/save@v4
