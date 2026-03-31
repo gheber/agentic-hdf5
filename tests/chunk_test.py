@@ -6,6 +6,7 @@ import pytest
 import h5py
 import tempfile
 import os
+import shutil
 import numpy as np
 
 from test_helpers import validate_success
@@ -139,3 +140,80 @@ class TestRechunkDataset:
                 os.unlink(filepath)
             if output_filepath and os.path.exists(output_filepath):
                 os.unlink(output_filepath)
+
+    def test_rechunk_nonexistent_file(self):
+        """Test error when input file doesn't exist."""
+        result = rechunk_dataset("/tmp/does_not_exist_ahdf5.h5", "/data", chunk_adjustment="larger")
+        assert result["success"] is False
+        assert "not found" in result["error"].lower()
+
+    def test_rechunk_nonexistent_dataset(self, tmp_path):
+        """Test error when dataset path doesn't exist in file."""
+        filepath = str(tmp_path / "test.h5")
+        with h5py.File(filepath, "w") as f:
+            f.create_dataset("data", data=[1, 2, 3])
+        result = rechunk_dataset(filepath, "/nonexistent", chunk_adjustment="larger")
+        assert result["success"] is False
+        assert "not found" in result["error"]
+
+    def test_rechunk_group_not_dataset(self, tmp_path):
+        """Test error when object path points to a group, not a dataset."""
+        filepath = str(tmp_path / "test.h5")
+        with h5py.File(filepath, "w") as f:
+            f.create_group("mygroup")
+        result = rechunk_dataset(filepath, "/mygroup", chunk_adjustment="larger")
+        assert result["success"] is False
+        assert "not a dataset" in result["error"]
+
+    def test_rechunk_output_already_exists(self, tmp_path):
+        """Test error when output file already exists."""
+        filepath = str(tmp_path / "test.h5")
+        output = str(tmp_path / "output.h5")
+        with h5py.File(filepath, "w") as f:
+            f.create_dataset("data", data=np.arange(100).reshape(10, 10), chunks=(5, 5))
+        with h5py.File(output, "w") as f:
+            pass
+        result = rechunk_dataset(filepath, "/data", output_filepath=output, chunk_adjustment="larger")
+        assert result["success"] is False
+        assert "already exists" in result["error"]
+
+    def test_rechunk_contiguous_dataset_adjustment(self, tmp_path):
+        """Test error when applying adjustment to a contiguous (non-chunked) dataset."""
+        filepath = str(tmp_path / "test.h5")
+        with h5py.File(filepath, "w") as f:
+            f.create_dataset("data", data=np.arange(100))
+        result = rechunk_dataset(filepath, "/data", chunk_adjustment="larger")
+        assert result["success"] is False
+        assert "contiguous" in result["error"].lower()
+
+    def test_rechunk_no_option_specified(self, tmp_path):
+        """Test error when no rechunk option is specified."""
+        filepath = str(tmp_path / "test.h5")
+        with h5py.File(filepath, "w") as f:
+            f.create_dataset("data", data=np.arange(100), chunks=(10,))
+        result = rechunk_dataset(filepath, "/data")
+        assert result["success"] is False
+        assert "must specify" in result["error"].lower()
+
+    def test_rechunk_make_contiguous(self, tmp_path):
+        """Test converting chunked dataset to contiguous layout."""
+        filepath = str(tmp_path / "test.h5")
+        with h5py.File(filepath, "w") as f:
+            f.create_dataset("data", data=np.arange(100).reshape(10, 10), chunks=(5, 5))
+        result = rechunk_dataset(filepath, "/data", make_contiguous=True)
+        assert result["success"] is True
+        assert "contiguous" in result["new_chunks"].lower()
+        if os.path.exists(result["output_filepath"]):
+            os.unlink(result["output_filepath"])
+
+    def test_rechunk_exact_dims(self, tmp_path):
+        """Test rechunking with exact chunk dimensions."""
+        filepath = str(tmp_path / "test.h5")
+        with h5py.File(filepath, "w") as f:
+            f.create_dataset("data", data=np.arange(100).reshape(10, 10), chunks=(5, 5))
+        result = rechunk_dataset(filepath, "/data", chunk_dims="2x2")
+        assert result["success"] is True
+        assert "(2, 2)" in result["new_chunks"]
+        with h5py.File(result["output_filepath"], "r") as f:
+            assert f["data"].chunks == (2, 2)
+        os.unlink(result["output_filepath"])

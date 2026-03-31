@@ -618,3 +618,19 @@ class TestSMDErrorPaths:
         assert result["success_count"] == 1
         assert result["failure_count"] == 1
         assert any(f["path"] == "/nonexistent_obj" for f in result["failures"])
+
+    def test_collect_nonexistent_object_path(self, tmp_path):
+        """collect_objects_for_smd with nonexistent starting path."""
+        path = str(tmp_path / "test.h5")
+        with h5py.File(path, "w") as f:
+            f.create_dataset("data", data=[1, 2, 3])
+        result = collect_objects_for_smd(path, object_path="/nonexistent")
+        assert "error" in result
+        assert result["total_in_batch"] == 0
+        assert result["batch_complete"] is True
+
+    def test_collect_nonexistent_file(self):
+        """collect_objects_for_smd with nonexistent file."""
+        result = collect_objects_for_smd("/tmp/does_not_exist_ahdf5.h5")
+        assert "error" in result
+        assert result["total_in_batch"] == 0

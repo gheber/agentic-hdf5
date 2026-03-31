@@ -399,3 +399,38 @@ class TestVSMD:
                 "test",
                 embedder_model="sentence-transformers/all-mpnet-base-v2"  # Different model
             )
+
+    def test_query_nonexistent_file(self):
+        """Test query on a file that doesn't exist."""
+        result = query_semantic_metadata("/tmp/does_not_exist_ahdf5.h5", "test")
+        assert result["status"] == "error"
+        assert "not found" in result["message"].lower()
+
+    def test_query_empty_filter_results(self, temp_h5_file):
+        """Test query with object_filter that matches nothing."""
+        with h5py.File(temp_h5_file, 'w') as f:
+            f.create_dataset('data', data=[1, 2, 3])
+        self.add_smd(temp_h5_file, '/data', 'Test dataset with some content')
+        vectorize_semantic_metadata(temp_h5_file, rebuild=True)
+
+        result = query_semantic_metadata(
+            temp_h5_file,
+            "test",
+            object_filter="/nonexistent_prefix"
+        )
+        assert result["status"] == "success"
+        assert len(result["results"]) == 0
+
+    def test_query_long_smd_preview_truncated(self, temp_h5_file):
+        """Test that long SMD text gets truncated in smd_preview."""
+        long_text = "A" * 300
+        with h5py.File(temp_h5_file, 'w') as f:
+            f.create_dataset('data', data=[1, 2, 3])
+        self.add_smd(temp_h5_file, '/data', long_text)
+        vectorize_semantic_metadata(temp_h5_file, rebuild=True)
+
+        result = query_semantic_metadata(temp_h5_file, "data", top_k=1)
+        assert result["status"] == "success"
+        assert len(result["results"]) == 1
+        assert result["results"][0]["smd_preview"].endswith("...")
+        assert len(result["results"][0]["smd_preview"]) == 203  # 200 + "..."

@@ -9,6 +9,12 @@ import os
 import numpy as np
 
 from get_object_metadata import get_object_metadata
+from h5py_helpers import (
+    _convert_to_json_serializable,
+    _get_numeric_statistics,
+    _estimate_size_bytes,
+    _get_attribute_metadata,
+)
 
 
 class TestGetObjectMetadata:
@@ -258,4 +264,110 @@ class TestGetObjectMetadata:
         finally:
             if filepath and os.path.exists(filepath):
                 os.unlink(filepath)
+
+    def test_nonexistent_file(self):
+        """Test error handling for nonexistent file."""
+        metadata = get_object_metadata("/tmp/does_not_exist_ahdf5.h5", "/data")
+        assert "error" in metadata
+
+
+class TestConvertToJsonSerializable:
+    """Tests for _convert_to_json_serializable helper."""
+
+    def test_numpy_bool(self):
+        assert _convert_to_json_serializable(np.bool_(True)) is True
+
+    def test_numpy_void(self):
+        val = np.void(b'\x01\x02')
+        result = _convert_to_json_serializable(val)
+        assert isinstance(result, str)
+
+    def test_bytes_value(self):
+        assert _convert_to_json_serializable(b"hello") == "hello"
+
+    def test_tuple_recursive(self):
+        result = _convert_to_json_serializable((np.int64(1), np.float64(2.5)))
+        assert result == (1, 2.5)
+        assert isinstance(result, tuple)
+
+    def test_list_recursive(self):
+        result = _convert_to_json_serializable([np.int64(1), b"test"])
+        assert result == [1, "test"]
+        assert isinstance(result, list)
+
+    def test_dict_recursive(self):
+        result = _convert_to_json_serializable({"a": np.int64(1), "b": b"test"})
+        assert result == {"a": 1, "b": "test"}
+
+    def test_plain_value_passthrough(self):
+        assert _convert_to_json_serializable("hello") == "hello"
+        assert _convert_to_json_serializable(42) == 42
+
+
+class TestGetNumericStatistics:
+    """Tests for _get_numeric_statistics helper."""
+
+    def test_non_numeric_array(self):
+        data = np.array(["a", "b", "c"])
+        assert _get_numeric_statistics(data) == {}
+
+    def test_not_an_array(self):
+        assert _get_numeric_statistics("not an array") == {}
+
+    def test_numeric_array(self):
+        data = np.array([1.0, 5.0, 3.0])
+        stats = _get_numeric_statistics(data)
+        assert stats["min"] == 1.0
+        assert stats["max"] == 5.0
+
+
+class TestEstimateSizeBytes:
+    """Tests for _estimate_size_bytes helper."""
+
+    def test_numpy_array(self):
+        arr = np.zeros((10,), dtype=np.float64)
+        assert _estimate_size_bytes(arr) == 80  # 10 * 8 bytes
+
+    def test_numpy_scalar(self):
+        val = np.float64(1.0)
+        assert _estimate_size_bytes(val) == 8
+
+    def test_python_int(self):
+        size = _estimate_size_bytes(42)
+        assert size > 0
+
+    def test_string(self):
+        assert _estimate_size_bytes("hello") == 5
+
+    def test_bytes(self):
+        assert _estimate_size_bytes(b"hello") == 5
+
+    def test_unknown_type(self):
+        assert _estimate_size_bytes(object()) == 0
+
+
+class TestGetAttributeMetadata:
+    """Tests for _get_attribute_metadata helper with edge cases."""
+
+    def test_large_string_attribute(self):
+        """Large strings should be omitted with a note."""
+        big_string = "x" * 2000
+        result = _get_attribute_metadata(big_string)
+        assert "note" in result
+        assert "Large string" in result["note"]
+
+    def test_large_array_attribute(self):
+        """Large arrays should be omitted with a note."""
+        big_array = np.arange(200000)
+        result = _get_attribute_metadata(big_array)
+        assert "note" in result
+        assert "Large array" in result["note"]
+
+    def test_numeric_scalar_attribute(self):
+        result = _get_attribute_metadata(np.float64(3.14))
+        assert result["value"] == 3.14
+
+    def test_small_bytes_attribute(self):
+        result = _get_attribute_metadata(b"test")
+        assert result["value"] == "test"
 
