@@ -11,7 +11,7 @@ from pathlib import Path
 # Add tools directory to path so we can import search_tools
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from tools.search_tools import search_tools, load_catalog, MAX_RESULTS
+from tools.search_tools import search_tools, load_catalog, format_tool_output, MAX_RESULTS
 
 
 @pytest.fixture
@@ -99,3 +99,42 @@ def test_all_tools_have_required_fields(catalog):
             assert field in tool, f"Tool '{tool.get('name', 'unknown')}' missing '{field}'"
         assert tool['name'], "Tool name should not be empty"
         assert tool['import'], "Tool import should not be empty"
+
+
+def test_format_tool_output_with_index():
+    """Test format_tool_output with a numbered index."""
+    tool = {
+        "name": "test_tool",
+        "description": "A test tool",
+        "category": "testing",
+        "import": "from test import test_tool",
+        "search_keywords": ["test", "tool", "coverage"],
+    }
+    output = format_tool_output(tool, index=1)
+    assert "1. test_tool" in output
+    assert "A test tool" in output
+    assert "testing" in output
+    assert "test, tool, coverage" in output
+
+
+def test_format_tool_output_without_index():
+    """Test format_tool_output without numbered index."""
+    tool = {
+        "name": "another_tool",
+        "description": "Another tool",
+        "category": "misc",
+        "import": "from misc import another_tool",
+        "search_keywords": [],
+    }
+    output = format_tool_output(tool, index=None)
+    assert "another_tool" in output
+    assert "1." not in output
+    assert "Keywords:" not in output
+
+
+def test_format_tool_output_missing_optional_fields():
+    """Test format_tool_output with minimal tool dict."""
+    tool = {"name": "minimal_tool"}
+    output = format_tool_output(tool)
+    assert "minimal_tool" in output
+    assert "N/A" in output

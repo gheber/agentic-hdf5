@@ -2,6 +2,7 @@
 
 ![Test Agentic HDF5 Tools](https://github.com/mattjala/agentic-hdf5/actions/workflows/test-ahdf5-tools.yml/badge.svg)
 ![GitHub tag](https://img.shields.io/github/v/tag/mattjala/agentic-hdf5)
+[![codecov](https://codecov.io/gh/mattjala/agentic-hdf5/branch/main/graph/badge.svg)](https://codecov.io/gh/mattjala/agentic-hdf5)
 
 A set of expansions and tools for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) that enable AI agents to work at a high level with HDF5 data and files. Provides 10+ tools, 14+ skills, support for semantic metadata, and natural language search of vectorized semantic metadata.
 

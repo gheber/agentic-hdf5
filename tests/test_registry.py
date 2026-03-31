@@ -85,3 +85,63 @@ def test_catalog_generation_schema():
         assert "search_keywords" in tool
         assert "category" in tool
         assert "use_cases" in tool
+
+
+class TestExtractDetailedDescription:
+    """Tests for _extract_detailed_description in generate_catalog."""
+
+    def test_no_docstring(self):
+        from tools.generate_catalog import _extract_detailed_description
+        def func():
+            pass
+        assert _extract_detailed_description(func) == ""
+
+    def test_single_line_docstring(self):
+        from tools.generate_catalog import _extract_detailed_description
+        def func():
+            """Just a summary."""
+        assert _extract_detailed_description(func) == ""
+
+    def test_multiline_docstring(self):
+        from tools.generate_catalog import _extract_detailed_description
+        def func():
+            """Summary line.
+
+            This is the body of the docstring.
+            It has multiple lines.
+
+            Args:
+                x: not included
+            """
+        result = _extract_detailed_description(func)
+        assert "body of the docstring" in result
+        assert "multiple lines" in result
+        assert "Args" not in result
+
+    def test_docstring_stops_at_returns(self):
+        from tools.generate_catalog import _extract_detailed_description
+        def func():
+            """Summary.
+
+            Body text here.
+
+            Returns:
+                Something
+            """
+        result = _extract_detailed_description(func)
+        assert "Body text here" in result
+        assert "Returns" not in result
+
+    def test_docstring_stops_at_parameters(self):
+        from tools.generate_catalog import _extract_detailed_description
+        def func():
+            """Summary.
+
+            Body text.
+
+            Parameters:
+                x: something
+            """
+        result = _extract_detailed_description(func)
+        assert "Body text" in result
+        assert "Parameters" not in result

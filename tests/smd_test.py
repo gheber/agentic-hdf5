@@ -7,6 +7,7 @@ import h5py
 import numpy as np
 import tempfile
 import os
+import stat
 from pathlib import Path
 
 # Import functions under test (to be implemented)
@@ -551,3 +552,69 @@ class TestBatchSMDGeneration:
         finally:
             if filepath and os.path.exists(filepath):
                 os.unlink(filepath)
+
+
+class TestSMDErrorPaths:
+    """Tests for error/edge-case paths in SMD read/write functions."""
+
+    def test_write_readonly_file(self, tmp_path):
+        """write_semantic_metadata OSError path for read-only files."""
+        path = str(tmp_path / "readonly.h5")
+        with h5py.File(path, "w") as f:
+            f.create_dataset("data", data=[1, 2, 3])
+        os.chmod(path, stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
+        try:
+            result = write_semantic_metadata(path, "/data", "test")
+            assert "error" in result.lower()
+        finally:
+            os.chmod(path, stat.S_IRUSR | stat.S_IWUSR)
+
+    def test_write_nonexistent_file(self):
+        """write_semantic_metadata OSError path for missing file."""
+        result = write_semantic_metadata("/tmp/does_not_exist_ahdf5.h5", "/data", "test")
+        assert "error" in result.lower()
+
+    def test_read_nonexistent_file(self):
+        """read_semantic_metadata exception path for missing file."""
+        result = read_semantic_metadata("/tmp/does_not_exist_ahdf5.h5", "/data")
+        assert "error" in result.lower()
+
+    def test_read_bytes_smd(self, tmp_path):
+        """read_semantic_metadata bytes decoding path."""
+        path = str(tmp_path / "bytes_smd.h5")
+        with h5py.File(path, "w") as f:
+            f.create_dataset("data", data=[1, 2, 3])
+            f["/"].attrs["ahdf5-smd-data"] = b"bytes metadata content"
+        result = read_semantic_metadata(path, "/data")
+        assert result == "bytes metadata content"
+
+    def test_batch_readonly_file(self, tmp_path):
+        """write_smd_batch OSError path for read-only file."""
+        path = str(tmp_path / "readonly.h5")
+        with h5py.File(path, "w") as f:
+            f.create_dataset("data", data=[1, 2, 3])
+        os.chmod(path, stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
+        try:
+            result = write_smd_batch(path, {"/data": "test metadata"})
+            assert result["success_count"] == 0
+            assert result["failure_count"] == 1
+        finally:
+            os.chmod(path, stat.S_IRUSR | stat.S_IWUSR)
+
+    def test_batch_nonexistent_file(self):
+        """write_smd_batch OSError path for missing file."""
+        result = write_smd_batch("/tmp/does_not_exist_ahdf5.h5", {"/data": "test"})
+        assert result["success_count"] == 0
+        assert result["failure_count"] == 1
+        assert len(result["failures"]) == 1
+
+    def test_batch_mixed_valid_invalid(self, tmp_path):
+        """write_smd_batch per-item exception path."""
+        path = str(tmp_path / "test.h5")
+        with h5py.File(path, "w") as f:
+            f.create_dataset("data", data=[1, 2, 3])
+        smd_map = {"/data": "valid metadata", "/nonexistent_obj": "should fail"}
+        result = write_smd_batch(path, smd_map, is_best_guess=False)
+        assert result["success_count"] == 1
+        assert result["failure_count"] == 1
+        assert any(f["path"] == "/nonexistent_obj" for f in result["failures"])
