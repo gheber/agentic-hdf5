@@ -30,6 +30,7 @@ dependencies = [
     "mcp",
     "fastembed",
     "netCDF4",
+    "compliance-checker",
 ]
 
 [project.optional-dependencies]

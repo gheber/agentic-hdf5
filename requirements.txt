@@ -6,3 +6,4 @@ tqdm
 xarray
 matplotlib
 netCDF4
+compliance-checker
