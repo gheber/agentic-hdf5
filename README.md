@@ -21,7 +21,7 @@ Run these [slash commands](https://docs.anthropic.com/en/docs/claude-code/cli-re
 /plugin install ahdf5-plugin@agentic-hdf5
 ```
 
-This gives you all 14+ skills and 10 MCP tools automatically.
+This gives you all 14+ skills and 10 MCP tools automatically. After installing, **restart your Claude Code session** for the plugin to take effect.
 
 For development/testing, clone the repo and load the plugin directly:
 
