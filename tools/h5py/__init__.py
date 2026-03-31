@@ -17,6 +17,7 @@ from tools.h5py.collect_objects_for_smd import collect_objects_for_smd
 from tools.h5py.write_smd_batch import write_smd_batch
 from tools.h5py.vectorize_semantic_metadata import vectorize_semantic_metadata
 from tools.h5py.query_semantic_metadata import query_semantic_metadata
+from tools.h5py.check_cf_compliance import check_cf_compliance
 
 __all__ = [
     "get_object_metadata",
@@ -29,4 +30,5 @@ __all__ = [
     "write_smd_batch",
     "vectorize_semantic_metadata",
     "query_semantic_metadata",
+    "check_cf_compliance",
 ]

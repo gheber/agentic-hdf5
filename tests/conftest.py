@@ -12,7 +12,9 @@ sys.path.insert(0, str(Path(__file__).parent.parent / 'tools' / 'h5py'))
 @pytest.fixture
 def test_h5_file():
     """Fixture that creates a temporary HDF5 file with test data"""
-    with tempfile.NamedTemporaryFile(suffix='.h5', delete=False) as tmp:
+    # Use project dir — snap Docker can't access /tmp
+    project_root = str(Path(__file__).resolve().parent.parent)
+    with tempfile.NamedTemporaryFile(suffix='.h5', delete=False, dir=project_root) as tmp:
         filepath = tmp.name
 
     with h5py.File(filepath, 'w') as f:

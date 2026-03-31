@@ -234,6 +234,99 @@
         "Semantic search for 'temperature data'",
         "Locating datasets by description"
       ]
+    },
+    {
+      "name": "check_cf_compliance",
+      "import": "from tools.h5py.check_cf_compliance import check_cf_compliance",
+      "description": "Check a NetCDF4/HDF5 file for CF convention compliance using the IOOS compliance-checker.",
+      "detailed_description": "Returns a structured report of compliance issues organized by severity, with CF spec section references and scores. Only applicable to NetCDF4-format files; plain HDF5 files written directly with h5py are not subject to CF conventions.  Runs the checker in a subprocess to avoid HDF5 library state conflicts between h5py and the netCDF4 library.",
+      "search_keywords": [
+        "cf",
+        "compliance",
+        "conventions",
+        "netcdf",
+        "standards",
+        "units",
+        "metadata",
+        "check",
+        "validate"
+      ],
+      "category": "inspection",
+      "use_cases": [
+        "Checking whether a NetCDF4 file conforms to CF conventions before publishing",
+        "Identifying missing or invalid metadata for THREDDS, ERDDAP, or OPeNDAP services",
+        "Assessing data interoperability and reusability",
+        "Preparing files for scientific data repositories (e.g., Zenodo, Dataverse)"
+      ]
+    },
+    {
+      "name": "markdown_to_pdf",
+      "import": "from tools.markdown_to_pdf import markdown_to_pdf",
+      "description": "Convert Markdown→PDF via pandoc+LaTeX. Engines: pdflatex|xelatex|lualatex|weasyprint. Handles math, tables, code blocks.",
+      "detailed_description": "Supports pdflatex, xelatex, and lualatex engines. Falls back to weasyprint if LaTeX is unavailable. Pass extra_args as a JSON array for advanced pandoc flags (e.g. '--toc'). Requires pandoc and a LaTeX distribution or weasyprint.",
+      "search_keywords": [
+        "markdown",
+        "pdf",
+        "convert",
+        "pandoc",
+        "latex",
+        "export",
+        "document",
+        "report"
+      ],
+      "category": "export",
+      "use_cases": [
+        "Exporting analysis reports to PDF",
+        "Converting documentation to PDF for sharing",
+        "Rendering LaTeX math in Markdown to PDF",
+        "Producing publication-ready documents from Markdown"
+      ]
+    },
+    {
+      "name": "sandbox_exec",
+      "import": "from tools.sandbox import sandbox_exec",
+      "description": "Execute Python/Bash code in isolated Docker container. State persists across calls. Optionally uploads host files first.",
+      "detailed_description": "Runs code inside a resource-limited Docker sandbox (512 MB RAM, 1 CPU, no network by default). Optionally uploads host files to /workspace/ before execution. Container is lazily started and auto-stopped after 30 min idle. Requires Docker and the ahdf5-sandbox image (built automatically from Dockerfile.sandbox).",
+      "search_keywords": [
+        "sandbox",
+        "execute",
+        "run code",
+        "docker",
+        "isolated",
+        "python",
+        "bash",
+        "safe execution",
+        "container"
+      ],
+      "category": "execution",
+      "use_cases": [
+        "Running untrusted or experimental code safely",
+        "Testing HDF5 scripts in an isolated environment",
+        "Executing multi-step data processing pipelines",
+        "Running bash commands without affecting the host"
+      ]
+    },
+    {
+      "name": "sandbox_reset",
+      "import": "from tools.sandbox import sandbox_reset",
+      "description": "Tear down and restart sandbox container. Clears all state and written files.",
+      "detailed_description": "Stops the running container and starts a fresh one, clearing all in-memory state and any files written during the session. Use when the sandbox is in a bad state or a clean slate is needed.",
+      "search_keywords": [
+        "sandbox",
+        "reset",
+        "restart",
+        "clean",
+        "docker",
+        "container",
+        "clear state"
+      ],
+      "category": "execution",
+      "use_cases": [
+        "Resetting sandbox state between unrelated tasks",
+        "Recovering from a broken or hung container",
+        "Starting fresh after installing conflicting packages",
+        "Clearing files written during a previous execution"
+      ]
     }
   ]
 }

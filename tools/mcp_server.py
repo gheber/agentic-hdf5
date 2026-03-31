@@ -34,8 +34,10 @@ from tools.h5py import (
     write_smd_batch as _write_smd_batch,
     vectorize_semantic_metadata as _vectorize_semantic_metadata,
     query_semantic_metadata as _query_semantic_metadata,
+    check_cf_compliance as _check_cf_compliance,
 )
 from tools.markdown_to_pdf import markdown_to_pdf as _markdown_to_pdf
+from tools.sandbox import sandbox_exec as _sandbox_exec, sandbox_reset as _sandbox_reset
 
 server = FastMCP("hdf5-tools")
 
@@ -232,6 +234,32 @@ def markdown_to_pdf(
     if extra_args is not None:
         parsed_extra = json.loads(extra_args) if isinstance(extra_args, str) else extra_args
     return _markdown_to_pdf(input_path, output_path, engine, parsed_extra)
+
+
+@server.tool()
+def check_cf_compliance(filepath: str, cf_version: str = "1.11") -> dict:
+    """Check a NetCDF4/HDF5 file for CF convention compliance. Returns a structured report of issues by severity with CF spec section references and scores. Requires compliance-checker (pip install compliance-checker). Not applicable to plain HDF5 files."""
+    return _check_cf_compliance(filepath, cf_version)
+
+
+@server.tool()
+def sandbox_exec(
+    code: str,
+    language: str = "python",
+    files: Optional[str] = None,
+    timeout: int = 30,
+) -> dict:
+    """Execute code in an isolated Docker sandbox container. State persists across calls within a session. Supports 'python' and 'bash' languages."""
+    parsed_files = None
+    if files is not None:
+        parsed_files = json.loads(files) if isinstance(files, str) else files
+    return _sandbox_exec(code, language=language, files=parsed_files, timeout=timeout)
+
+
+@server.tool()
+def sandbox_reset() -> dict:
+    """Tear down and restart the sandbox container for a clean environment."""
+    return _sandbox_reset()
 
 
 def main():

@@ -1,0 +1,8 @@
+FROM python:3.12-slim
+
+RUN pip install --no-cache-dir h5py numpy matplotlib xarray
+
+WORKDIR /workspace
+
+# Keep container alive — we exec into it
+CMD ["sleep", "infinity"]

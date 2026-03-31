@@ -46,6 +46,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pytest-cov
 
       - name: Build HDF5 2.0.0 with tools
         if: steps.cache-hdf5.outputs.cache-hit != 'true'
@@ -100,12 +101,36 @@ jobs:
           pip install -e .
           timeout 5 hdf5-mcp-server || [ $? -eq 124 ]
 
-      - name: Run h5py MCP tests
+      - name: Install CodeClimate test reporter
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+
+      - name: CodeClimate before-build
+        run: ./cc-test-reporter before-build
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+
+      - name: Run tests with coverage
         run: |
           # Skip filter tests due to inconsistent h5repack filter availability in GitHub Actions.
           # h5repack command-line tools are not reliably available with pip-installed h5py,
           # and system HDF5 installations may not have consistent filter support (e.g., deflate/gzip).
-          pytest -k "not TestApplyFilterDataset"
+          pytest -k "not TestApplyFilterDataset" \
+            --cov=tools --cov-report=xml --cov-report=term-missing
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          fail_ci_if_error: false
+
+      - name: CodeClimate after-build
+        if: always()
+        run: ./cc-test-reporter after-build --coverage-input-type coverage.py
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
 
       - name: Save HDF5 cache
         uses: actions/cache/save@v4
