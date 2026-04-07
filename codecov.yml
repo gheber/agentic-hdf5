@@ -1,0 +1,15 @@
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+    patch:
+      default:
+        target: auto
+
+ignore:
+  - "tools/mcp_server.py"
+  - "tools/sandbox.py"
+  - "tools/generate_catalog.py"
+  - "tools/h5py/visualize.py"
+  - "tools/markdown_to_pdf.py"
